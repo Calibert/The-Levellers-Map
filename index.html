@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html style="height: 100%; margin: 0;">
+<head>
+    <title>Levellers Map</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="scripts/leaflet/leaflet-src.js"></script>
+    <link rel="stylesheet" href="scripts/leaflet/leaflet.css"/>
+
+	<script src="scripts/leaflet/leaflet.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+	<script src="scripts/leaflet/Leaflet.Marker.Parallax.js"></script>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/Leaflet.draw.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="scripts/leaflet/Leaflet.draw/src/leaflet.draw.css"/>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/Toolbar.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/Tooltip.js"></script>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/GeometryUtil.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/LatLngUtil.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/LineUtil.Intersect.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/Polygon.Intersect.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/Polyline.Intersect.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/ext/TouchEvents.js"></script>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/DrawToolbar.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Feature.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Marker.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Circle.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.CircleMarker.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/EditToolbar.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/Control.Draw.js"></script>
+
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.Poly.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.Marker.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="scripts/leaflet/Leaflet.draw/src/edit/handler/Edit.Circle.js"></script>
+
+    <link rel="stylesheet" href="scripts/leaflet/Leaflet-MiniMap-master/src/Control.MiniMap.css" />
+	<script src="scripts/leaflet/Leaflet-MiniMap-master/src/Control.MiniMap.js" type="text/javascript"></script>
+
+	<script src="scripts/leaflet/Control.FullScreen.js"></script>
+
+    <style>
+        #map { width: 100%; height: 100%; margin: 0px; padding: 0px; position: absolute; top: 0px; left: 0px; }
+        .parallax-marker.label{
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            color: rgb(5, 113, 149);
+            text-transform: uppercase;
+            text-shadow: rgb(255, 255, 255) 1px 0px 1px, rgb(255, 255, 255) -1px 0px 1px, rgb(255, 255, 255) 0px -1px 1px, rgb(255, 255, 255) 0px 1px 1px;
+        }
+        .parallax-marker.label.huge{ font-size: 60px; color: rgba(5, 113, 149, 0.39); text-shadow: none;}
+        .parallax-marker.label.big{ font-size: 20px; }
+        .parallax-marker.label.medium{ font-size: 16px; color: rgb(5, 113, 149); font-weight: normal;}
+        .parallax-marker.label.small{  font-size: 15px; text-transform: none; font-weight: normal; color: rgb(137, 128, 144); }
+    </style>
+
+    <style type="text/css">
+		.fullscreen-icon { background-image: url(images/icon-fullscreen.png); }
+		.leaflet-retina .fullscreen-icon { background-image: url(images/icon-fullscreen-2x.png); background-size: 26px 26px; }
+		/* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+		.leaflet-container:-webkit-full-screen { width: 100% !important; height: 100% !important; z-index: 99999; }
+		.leaflet-container:-ms-fullscreen { width: 100% !important; height: 100% !important; z-index: 99999; }
+		.leaflet-container:full-screen { width: 100% !important; height: 100% !important; z-index: 99999; }
+		.leaflet-container:fullscreen { width: 100% !important; height: 100% !important; z-index: 99999; }
+		.leaflet-pseudo-fullscreen { position: fixed !important; width: 100% !important; height: 100% !important; top: 0px !important; left: 0px !important; z-index: 99999; }
+    </style>
+</head>
+<body style="height: 100%; margin: 0;">
+
+<div id="map" style="width: 100%; height: 100%; background: #7585B2; margin: 0;"></div>
+
+<script type="text/javascript">
+// Variables
+var mapSW = [0, 16384],
+	mapNE = [16384 , 0];
+
+// Declare Map Object
+var map = L.map('map', {
+	center: new L.LatLng(48.5, -4.5),
+	zoom: 5,
+	fullscreenControl: true,
+	fullscreenControlOptions: { // optional
+		title:"Fullscreen mode",
+		titleCancel:"Exit Fullscreen mode"
+	}
+});
+
+// detect fullscreen toggling
+map.on('enterFullscreen', function(){
+	if(window.console) window.console.log('enterFullscreen');
+});
+map.on('exitFullscreen', function(){
+	if(window.console) window.console.log('exitFullscreen');
+});
+
+// Reference the tiles
+  L.tileLayer('maps/levellers/{z}/{x}/{y}.png', {
+ 	attribution: '&copy; <a href="https://www.nationstates.net/region=the_levellers/copyright">The Levellers</a> contributors',
+  	minZoom: 3,
+  	maxZoom: 6,
+  	drawControl: true,
+  	continuousWorld: false,
+  	noWrap: true,
+ 	crs: L.CRS.Simple
+ 	}).addTo(map);
+
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+    var drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems
+        }
+    });
+    map.addControl(drawControl);
+
+map.addControl(new L.Control.Draw({
+    edit: {
+        featureGroup: drawnItems,
+        poly: {
+            allowIntersection: false
+        }
+    },
+    draw: {
+        polygon: {
+            allowIntersection: false,
+            showArea: true
+        }
+    }
+}));
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+
+        drawnItems.addLayer(layer);
+    });	   
+
+// Markers and Popups
+var calibertIcon = L.icon({
+    iconUrl: 'images/calibert.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var redaryaIcon = L.icon({
+    iconUrl: 'images/redaria.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var macariIcon = L.icon({
+    iconUrl: 'images/macari.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var seapointIcon = L.icon({
+    iconUrl: 'images/seapoint.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var karabiIcon = L.icon({
+    iconUrl: 'images/karabi.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var alastairIcon = L.icon({
+    iconUrl: 'images/alastair.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var rakiaIcon = L.icon({
+    iconUrl: 'images/rakia.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var merktyneIcon = L.icon({
+    iconUrl: 'images/merktyne.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var blackcareIcon = L.icon({
+    iconUrl: 'images/blackcare.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var wiletorIcon = L.icon({
+    iconUrl: 'images/weilor.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var derilanIcon = L.icon({
+    iconUrl: 'images/derilan.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [55, 28], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [28, 28], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var capital1Icon = L.icon({
+    iconUrl: 'images/building_capital.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [25, 25], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [13, 25], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var portIcon = L.icon({
+    iconUrl: 'images/port.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [25, 25], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [13, 25], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var airIcon = L.icon({
+    iconUrl: 'images/air.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [25, 25], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [13, 25], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var fortIcon = L.icon({
+    iconUrl: 'images/fort.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [25, 25], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [13, 25], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var terIcon = L.icon({
+    iconUrl: 'images/territory.png',
+    shadowUrl: 'images/marker_shadow.png',
+    iconSize:     [89, 84], // size of the icon
+    shadowSize:   [41, 41], // size of the shadow
+    iconAnchor:   [45, 84], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var marker = L.marker([-7.732765, 34.365234], {icon: calibertIcon}).addTo(map);
+marker.bindPopup('<b>The Kingdom of Calibert</b><br />Head of State: King Paul II | Type of Government: Constitutional Monarchy | Capital: Imperia');
+
+var marker = L.marker([-7.776308503776192, 32.36572265625001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Calibertian Port</b><br />King Henry VI National Port');
+
+var marker = L.marker([-8.015715997869059, 26.960449218750004], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Calibertian Port</b><br />Blue Land Harbor');
+
+var marker = L.marker([-9.058702156392126, 34.38720703125001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Calibertian Airfield</b><br />King Markus I National Airfield');
+
+var marker = L.marker([-5.025282908609298, 32.76123046875001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Calibertian Airfield</b><br />Princess Karia Airfield');
+
+var marker = L.marker([-12.017830337768213, 33.48632812500001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-11.888853082975956, 34.58496093750001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-11.480024648555816, 35.83740234375001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-11.264612212504428, 36.43066406250001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-11.027472194117934, 37.11181640625001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-10.6822006000841, 37.44140625000001], {icon: fortIcon}).addTo(map);
+marker.bindPopup('<b>Fortified Frontier | Calibert - Redarya');
+
+var marker = L.marker([-8.819938928283147, 32.25585937500001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Calibert');
+
+var marker = L.marker([-10.660607953624762, 64.64355468750001], {icon: macariIcon}).addTo(map);
+marker.bindPopup('<b>The Macari Confederation</b><br />Head of State: President John McCalister | Type of Government: Confederate Republic | Capital: Creyroad | Diplomatic Status: Friendly | Military Status: Weak | Political Status: Stable');
+
+var marker = L.marker([-5.112829778499449, 59.52392578125001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Macari');
+
+var marker = L.marker([-9.25393615681445, 58.20556640625001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Macarian Port</b><br />Port Jeeve');
+
+var marker = L.marker([-6.7737162387535, 57.43652343750001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Macarian Airfield</b><br />Great Karv Airport');
+
+var marker = L.marker([21.616579336740603, 44.89013671875001], {icon: seapointIcon}).addTo(map);
+marker.bindPopup('<b>The Republic of Seapoint</b><br />Head of State: President Arthur Sheridan | Type of Government: Republic | Capital: Oakwood Harbor | Diplomatic Status: Aggressive | Military Status: Average | Political Status: Unrest');
+
+var marker = L.marker([19.518375478601566, 38.89160156250001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Seapoint');
+
+var marker = L.marker([20.59165212082918, 38.78173828125001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Seapoint Port</b><br />Oakwood Harbor');
+
+var marker = L.marker([24.347096633808512, 46.31835937500001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Seapoint Airfield</b><br />Admiral Frederick Airport');
+
+var marker = L.marker([-10.206813072484595, 11.271972656250002], {icon: karabiIcon}).addTo(map);
+marker.bindPopup('<b>The State of Karabi</b><br />Head of State: General Benjamin Silverstone | Type of Government: Military Junta | Capital: Karabi City | Diplomatic Status: Isolationist | Military Status: Weak | Political Status: Stable');
+
+var marker = L.marker([-9.167178732976664, 7.866210937500001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Karabi');
+
+var marker = L.marker([-7.079088026071719, 7.250976562500001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Karabian Port</b><br />Port Laria');
+
+var marker = L.marker([-9.44906182688142, 13.249511718750002], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Karabian Airfield</b><br />President Nari Airport');
+
+var marker = L.marker([-13.453737213419249, 43.76953125], {icon: redaryaIcon}).addTo(map);
+marker.bindPopup('<b>The Empire of Redarya</b><br />Head of State: Emperor Davianus VII | Type of Government: Absolute Monarchy | Capital: Lindsay | Diplomatic Status: Neutral | Military Status: Strong | Political Status: Stable');
+
+var marker = L.marker([-16.53089842368168, 35.81542968750001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Redarya');
+
+var marker = L.marker([-1.7136116598836224, 46.40625000000001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Redaryan Airfield</b><br />Great Karv Airport');
+
+var marker = L.marker([-12.940322128384613, 56.953125], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Redaryan Port</b><br />Zatar Harbor');
+
+var marker = L.marker([19.062117883514652, -6.723632812500001], {icon: alastairIcon}).addTo(map);
+marker.bindPopup('<b>The Kingdom of Alastair</b><br />Head of State: King Marcus IV | Type of Government: Constitutional Monarchy | Capital: Garley | Diplomatic Status: Friendly | Military Status: Strong | Political Status: Stable');
+
+var marker = L.marker([16.488764934242077, -8.063964843750002], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Alastair');
+
+var marker = L.marker([16.214674588248556, -7.646484375000001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Alastair Port</b><br />Garley National Harbor');
+
+var marker = L.marker([20.46818922264095, -7.756347656250001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Alastair Airfield</b><br />King Joseph II Airport');
+
+var marker = L.marker([34.252676117101515, -4.680175781250001], {icon: rakiaIcon}).addTo(map);
+marker.bindPopup('<b>The Theocracy of Rakia</b><br />Head of State: Prelate David Marshall | Type of Government: Theocracy | Capital: Templetown | Diplomatic Status: Neutral | Military Status: Average | Political Status: Stable');
+
+var marker = L.marker([35.40696093270201, -2.4169921875000004], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Rakia');
+
+var marker = L.marker([33.22949814144951, -5.976562500000001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Rakian Airfield</b><br />Divine Lord Airport');
+
+var marker = L.marker([24.86650252692691, -15.600585937500002], {icon: merktyneIcon}).addTo(map);
+marker.bindPopup('<b>The Tribes of Merktyne</b><br />Head of State: Chief Irinakhoiw | Type of Government: Tribal Autocracy | Capital: Laslubia | Diplomatic Status: Isolationist | Military Status: Weak | Political Status: Civil War');
+
+var marker = L.marker([25.70093788144429, -17.753906250000004], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Merktyne');
+
+var marker = L.marker([26.96124577052697, -18.061523437500004], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Merktyne Port</b><br />Raylarhakt Port');
+
+var marker = L.marker([23.98625259984181, -14.985351562500002], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Merktyne Airfield</b><br />Keruliakia Airport');
+
+var marker = L.marker([1.9991059831233327, -47.724609375], {icon: blackcareIcon}).addTo(map);
+marker.bindPopup('<b>The Republic of Blackcare</b><br />Head of State: President Francis Connelly | Type of Government: Federal Republic | Capital: Blackcare City | Diplomatic Status: Aggressive | Military Status: Strong | Political Status: Stable');
+
+var marker = L.marker([7.558546606093156, -45.70312500000001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Blackcare');
+
+var marker = L.marker([10.660607953624776, -43.79150390625], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Blackcare Port</b><br />Black Harbor');
+
+var marker = L.marker([1.4061088354351594, -44.736328125], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Blackare Airfield</b><br />Blackcare National Airport');
+
+var marker = L.marker([-28.979312036722447, -56.05224609375001], {icon: wiletorIcon}).addTo(map);
+marker.bindPopup('<b>The Council of Wiletor</b><br />Head of State: Chairman Curt Johnstone | Type of Government: Aristocratic Republic | Capital: Arelia | Diplomatic Status: Friendly | Military Status: Average | Political Status: Unrest');
+
+var marker = L.marker([-33.74261277734688, -62.66601562500001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Wiletor');
+
+var marker = L.marker([-34.5065566216456, -63.01757812500001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Wiletor Port</b><br />Arelia Port');
+
+var marker = L.marker([-29.516110386062277, -58.75488281250001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Wiletor Airfield</b><br />Councillor Ivan Airport');
+
+var marker = L.marker([15.453680224345835, -75.60791015625001], {icon: derilanIcon}).addTo(map);
+marker.bindPopup('<b>The Kingdom of Derilan</b><br />Head of State: Prime Minister Charles Kingston | Type of Government: Constitutional Monarchy | Capital: Salvian | Diplomatic Status: Aggressive | Military Status: Weak | Political Status: Stable');
+
+var marker = L.marker([16.277960306212524, -77.54150390625001], {icon: capital1Icon}).addTo(map);
+marker.bindPopup('<b>National Capital | Derilan');
+
+var marker = L.marker([17.978733095556183, -78.92578125000001], {icon: portIcon}).addTo(map);
+marker.bindPopup('<b>Derilan Port</b><br />Salvian Port');
+
+var marker = L.marker([15.538375926292062, -73.95996093750001], {icon: airIcon}).addTo(map);
+marker.bindPopup('<b>Derilan Airfield</b><br />Royal Airport');
+
+var polygon = L.polygon ([
+ [-6.053161295714067, 27.114257812500004],
+ [-6.075011000682009, 27.465820312500004],
+ [-6.293458760393985, 27.487792968750004],
+ [-6.402648405963884, 27.817382812500004],
+ [-6.7737162387535, 27.5537109375],
+ [-6.948238638117006, 27.729492187500004],
+ [-6.577303118123875, 28.081054687500004],
+ [-6.35897532723566, 28.1689453125],
+ [-6.271618064314864, 28.542480468750004],
+ [-5.7690358661221355, 28.564453125000004],
+ [-5.7690358661221355, 29.113769531250004],
+ [-5.484768018141262, 29.289550781250004],
+ [-4.959615024698014, 29.443359375000004],
+ [-4.806364708499998, 29.904785156250004],
+ [-4.937724274302479, 30.234375000000004],
+ [-4.58737615344969, 30.212402343750004],
+ [-4.36832042087623, 30.541992187500004],
+ [-4.455950571647079, 30.717773437500004],
+ [-3.71078200434872, 30.981445312500004],
+ [-3.71078200434872, 31.267089843750004],
+ [-3.513421045640032, 31.552734375000004],
+ [-3.513421045640032, 31.552734375000004],
+ [-3.688855143147035, 31.750488281250004],
+ [-3.491489430459778, 32.10205078125001],
+ [-3.5572827265412794, 32.87109375000001],
+ [-3.6449998008920375, 33.04687500000001],
+ [-3.601142320158722, 33.42041015625001],
+ [-3.5572827265412794, 33.94775390625001],
+ [-3.35988909487339, 34.29931640625001],
+ [-3.579212785860631, 34.69482421875001],
+ [-3.71078200434872, 34.58496093750001],
+ [-4.127285323245357, 35.15625000000001],
+ [-4.36832042087623, 35.13427734375001],
+ [-4.324501493019203, 35.77148437500001],
+ [-4.653079918274038, 36.07910156250001],
+ [-4.981505049328246, 36.91406250000001],
+ [-5.506639674354886, 36.93603515625001],
+ [-5.98760689165826, 37.24365234375001],
+ [-5.98760689165826, 37.48535156250001],
+ [-6.271618064314864, 38.18847656250001],
+ [-6.577303118123875, 38.0126953125],
+ [-6.882800241767556, 38.14453125000001],
+ [-6.991859181483679, 38.43017578125001],
+ [-7.231698708367139, 38.43017578125001],
+ [-7.493196470122275, 38.89160156250001],
+ [-7.776308503776192, 38.80371093750001],
+ [-7.819847426192575, 38.58398437500001],
+ [-8.18974234438369, 38.34228515625001],
+ [-8.450638800331001, 38.40820312500001],
+ [-8.841651120809145, 38.58398437500001],
+ [-9.514079262770892, 38.58398437500001],
+ [-10.163560279490476, 37.83691406250001],
+ [-10.379765224421455, 37.85888671875001],
+ [-10.595820834654047, 37.37548828125001],
+ [-10.876464994816283, 37.44140625000001],
+ [-11.070602913977806, 37.06787109375001],
+ [-11.28616076875259, 36.95800781250001],
+ [-11.178401873711772, 36.49658203125001],
+ [-11.501556900932487, 36.27685546875001],
+ [-11.5230875068685, 35.74951171875001],
+ [-11.867350911459308, 35.68359375000001],
+ [-12.017830337768213, 34.78271484375001],
+ [-11.867350911459308, 34.54101562500001],
+ [-11.931852326960579, 34.14550781250001],
+ [-12.017830337768213, 34.10156250000001],
+ [-11.931852326960579, 33.70605468750001],
+ [-12.168225677390119, 33.31054687500001],
+ [-12.168225677390119, 32.93701171875001],
+ [-11.5230875068685, 32.84912109375001],
+ [-11.501556900932487, 32.47558593750001],
+ [-10.876464994816283, 32.34375000000001],
+ [-10.898042159726009, 31.816406250000004],
+ [-11.501556900932487, 31.948242187500004],
+ [-12.017830337768213, 31.574707031250004],
+ [-11.716788389998475, 30.937500000000004],
+ [-11.953349393643416, 30.739746093750004],
+ [-11.802834233547674, 30.322265625000004],
+ [-11.996338401936226, 30.212402343750004],
+ [-11.824341483849048, 29.970703125000004],
+ [-12.082295837363578, 29.135742187500004],
+ [-11.587669416896203, 28.652343750000004],
+ [-11.630715737981486, 28.542480468750004],
+ [-11.480024648555816, 27.817382812500004],
+ [-11.759814674441921, 27.465820312500004],
+ [-11.630715737981486, 27.158203125000004],
+ [-11.931852326960579, 26.960449218750004],
+ [-11.824341483849048, 26.674804687500004],
+ [-11.60919340793894, 26.389160156250004],
+ [-11.221510260010541, 26.674804687500004],
+ [-10.854886268472447, 27.048339843750004],
+ [-10.790140750321738, 27.905273437500004],
+ [-10.746969318459989, 28.278808593750004],
+ [-10.18518740926906, 28.740234375000004],
+ [-9.66573839518868, 29.531250000000004],
+ [-9.167178732976664, 29.707031250000004],
+ [-8.885071663468993, 29.992675781250004],
+ [-8.42890409287538, 30.651855468750004],
+ [-8.233237111274553, 31.157226562500004],
+ [-8.494104537551882, 31.640625000000004],
+ [-7.993957436359008, 31.992187500000004],
+ [-7.493196470122275, 31.838378906250004],
+ [-7.144498849647323, 31.816406250000004],
+ [-6.577303118123875, 31.970214843750004],
+ [-6.315298538330033, 31.816406250000004],
+ [-6.271618064314864, 31.354980468750004],
+ [-6.511814706347888, 30.849609375000004],
+ [-7.231698708367139, 30.190429687500004],
+ [-7.1226962775182825, 29.663085937500004],
+ [-7.536764322084078, 28.894042968750004],
+ [-7.689217127736178, 28.1689453125],
+ [-8.102738577783168, 27.531738281250004],
+ [-7.689217127736178, 26.762695312500004],
+ [-7.536764322084078, 26.367187500000004],
+ [-7.645664723491027, 25.971679687500004],
+ [-7.1663003819031825, 24.982910156250004],
+ [-6.555474602201876, 24.851074218750004],
+ [-6.206090498573885, 24.851074218750004]
+]).addTo(map);
+
+var latlngs = [[-12.168225677390119, 33.09082031250001],[-11.867350911459308, 33.66210937500001],[-12.039320557540572, 34.10156250000001],[-11.867350911459308, 34.62890625000001],[-12.039320557540572, 34.89257812500001],[-11.910353555774101, 35.68359375000001],[-11.480024648555816, 35.85937500000001],[-11.5230875068685, 36.21093750000001],[-11.092165893502, 36.56250000000001],[-11.30770770776545, 36.91406250000001],[-10.833305983642491, 37.48535156250001],[-10.660607953624762, 37.39746093750001],[-10.574222078332806, 37.79296875000001],[-11.39387923296741, 38.40820312500001],[-11.695272733029402, 38.45214843750001],[-11.974844752931832, 38.95751953125001],[-12.46876014482322, 38.91357421875],[-12.576009912063787, 39.48486328125001],[-12.232654837013472, 39.92431640625001],[-12.382928338487396, 40.23193359375001],[-11.996338401936226, 40.51757812500001],[-11.781325296112277, 40.23193359375001],[-11.39387923296741, 40.29785156250001],[-11.60919340793894, 40.78125000000001],[-11.458490752653873, 40.97900390625001],[-10.984335146101955, 40.80322265625001],[-10.790140750321738, 41.11083984375001],[-11.070602913977806, 41.50634765625001],[-11.070602913977806, 41.83593750000001],[-10.768555807732422, 41.85791015625001],[-10.552621801948721, 42.20947265625], [-10.919617760254685, 42.49511718750001],[-11.070602913977806, 42.38525390625001],[-11.199956869621811, 42.64892578125001],[-10.833305983642491, 43.505859375],[-11.070602913977806, 43.8134765625],[-11.027472194117934, 44.12109375],[-10.725381285457912, 44.16503906250001],[-10.574222078332806, 44.31884765625001],[-10.163560279490476, 44.18701171875001],[-9.86062814536589, 44.60449218750001],[-8.90678000752024, 44.6923828125],[-8.841651120809145, 44.47265625000001],[-8.885071663468993, 44.23095703125001],[-8.667918002363107, 44.03320312500001],[-8.320212289522944, 44.25292968750001],[-8.03747339584114, 44.01123046875001],[-7.776308503776192, 44.14306640625001],[-7.667441482726056, 44.67041015625],[-8.298470297067356, 44.67041015625],[-8.298470297067356, 45.10986328125001],[-7.950436835029361, 45.15380859375001],[-7.536764322084078, 45.19775390625001],[-7.253496050069527, 45.06591796875001],[-6.839169626342808, 44.84619140625001],[-6.533645130567532, 45.10986328125001],[-6.991859181483679, 45.41748046875001],[-6.7737162387535, 45.6591796875],[-6.489983332670651, 45.50537109375001],[-6.315298538330033, 45.615234375],[-5.9657536710655235, 45.41748046875001],[-5.55038056899795, 45.43945312500001],[-5.28788741401132, 45.32958984375],[-4.937724274302479, 45.54931640625001],[-4.762572524280269, 45.19775390625001],[-4.565473550710278, 45.10986328125001],[-4.434044005032582, 45.46142578125001],[-4.521666342614791, 45.87890625],[-4.127285323245357, 45.9228515625],[-4.083452772038619, 45.615234375],[-3.7765593098768635, 45.46142578125001],[-3.579212785860631, 45.52734375000001],[-3.2502085616531686, 45.19775390625001],[-3.0308121226643703, 45.37353515625001],[-2.767477951092084, 44.736328125],[-2.4821334037305633, 44.60449218750001],[-2.1967272417616583, 44.62646484375001],[-2.04302395742204, 44.27490234375001],[-2.2625953010152324, 44.0771484375],[-2.218683588558448, 43.79150390625],[-2.7235830833483856, 43.79150390625],[-2.6577377901397883, 43.17626953125],[-2.284550660236957, 43.06640625000001],[-2.0869407308811065, 43.505859375],[-1.208406497271858, 43.13232421875],[-0.9667509997666298, 42.73681640625001],[-0.6591651462894504, 42.64892578125001],[-0.2636709443366629, 42.62695312500001],[-0.13183582116662096, 42.51708984375],[0.37353251022880474, 42.64892578125001],[0.2856433479945185, 43.04443359375001],[0.4394488164139768, 43.33007812500001],[0.21972602392080884, 43.70361328125001],[0.7031073524364909, 43.63769531250001],[1.0765967983064109, 44.14306640625001],[1.1644706071806057, 44.71435546875],[1.1644706071806057, 45.21972656250001],[1.2743089918452106, 45.46142578125001],[1.1205340322500674, 45.68115234375001],[1.4500404973608074, 45.90087890625],[1.8234225930141614, 46.5380859375],[1.2743089918452106, 46.56005859375],[1.098565496040652, 46.47216796875001],[0.856901647439813, 46.56005859375],[0.5493079911125155, 46.494140625],[0.4174767746707514, 46.88964843750001],[-0.06591795420830737, 47.43896484375],[0.2856433479945185, 47.724609375],[0.08789059053082422, 48.49365234375001],[0.7250783020332547, 48.86718750000001],[0.7031073524364909, 49.306640625],[1.208406497271858, 49.41650390625001],[1.252341676699629, 49.68017578125001],[0.8349313860427184, 49.59228515625],[0.5712795966325395, 49.74609375000001],[0.24169850190165, 49.76806640625001],[0.15380840901698828, 50.25146484375001],[-0.4174767746707514, 50.2294921875],[-0.2856433479945058, 49.85595703125001],[-0.7250783020332547, 49.70214843750001],[-0.9887204566941844, 49.81201171875001],[-1.3402098002785028, 49.65820312500001],[-1.669685500986571, 50.03173828125001],[-1.9551868337565106, 49.70214843750001],[-2.3943223575350774, 50.2294921875],[-2.67968661580376, 50.2294921875],[-2.85526278436657, 50.55908203125001],[-3.074695072369682, 50.73486328125001],[-3.074695072369682, 51.4599609375],[-3.4476246666468526, 51.30615234375001],[-3.46955730306146, 50.86669921875001],[-3.798483975036962, 50.77880859375001],[-4.34641127533318, 50.8447265625],[-4.696879026871413, 50.25146484375001],[-4.740675384778361, 49.5703125],[-5.047170736919708, 49.08691406250001],[-5.419148251825286, 49.37255859375001],[-6.402648405963884, 49.72412109375001],[-6.620957270326323, 49.921875],[-7.100892668623642, 49.54833984375001],[-7.01366792756663, 49.04296875000001],[-7.493196470122275, 48.86718750000001],[-7.863381805309173, 49.15283203125001],[-7.689217127736178, 49.65820312500001],[-7.863381805309173, 50.185546875],[-8.102738577783168, 50.62500000000001],[-8.42890409287538, 51.04248046875001],[-8.581021215641842, 51.43798828125],[-8.102738577783168, 51.63574218750001],[-7.754537346539373, 51.13037109375],[-7.340674831854912, 50.97656250000001],[-6.839169626342808, 51.08642578125001],[-6.577303118123875, 51.416015625],[-6.620957270326323, 51.96533203125001],[-6.68643125265198, 52.53662109375001],[-7.18810087117902, 52.62451171875001],[-7.776308503776192, 52.47070312500001],[-8.537565350804018, 53.45947265625001],[-8.581021215641842, 54.20654296875],[-9.730714305756942, 54.66796875000001],[-9.81732918706777, 55.45898437500001],[-15.411319377980993, 57.34863281250001],[-14.881087159090647, 56.60156250000001],[-14.987239525774244, 56.07421875000001],[-15.368949896534705, 55.98632812500001],[-15.199386048560008, 55.50292968750001],[-15.368949896534705, 55.107421875],[-14.987239525774244, 54.90966796875001],[-15.241789855961722, 54.53613281250001],[-15.559544421458089, 54.66796875000001],[-15.580710739162123, 53.96484375000001],[-15.749962572748768, 53.5693359375],[-15.496032414238622, 53.02001953125001],[-15.728813770533979, 52.77832031250001],[-15.580710739162123, 52.3828125],[-15.64419660086606, 52.16308593750001],[-15.749962572748768, 51.50390625000001],[-16.024695711685304, 51.61376953125001],[-16.25686733062343, 51.1083984375],[-15.961329081596647, 50.66894531250001],[-16.488764934242077, 50.66894531250001],[-17.056784609942554, 50.86669921875001],[-17.161785912715136, 50.33935546875001],[-16.804541076383455, 49.79003906250001],[-17.35063837604883, 49.65820312500001],[-17.308687886770024, 49.21875000000001],[-17.644022027872726, 48.88916015625001],[-17.853290114098012, 48.88916015625001],[-18.104087015773946, 47.87841796875001],[-17.853290114098012, 47.81250000000001],[-17.539296556236692, 48.01025390625001],[-17.224758206624628, 47.61474609375001],[-17.602139123350838, 47.35107421875001],[-17.581194026506008, 46.88964843750001],[-18.208480196039883, 46.8017578125],[-18.396230138028812, 47.39501953125001],[-18.687878686034182, 47.08740234375001],[-18.396230138028812, 46.51611328125],[-18.93746442964186, 46.16455078125001],[-19.2074285268012, 46.16455078125001],[-19.31114335506464, 45.87890625],[-19.84939395842278, 46.07666015625001],[-19.518375478601556, 46.47216796875001],[-19.746024239625427, 46.66992187500001],[-20.014645445341355, 46.05468750000001],[-20.262197124246534, 46.09863281250001],[-20.488773287109822, 46.69189453125001],[-20.776659051878816, 46.494140625],[-20.427012814257385, 45.87890625],[-20.67390526467283, 45.63720703125],[-20.858811790867687, 45.68115234375001],[-21.166483858206583, 44.58251953125001],[-21.616579336740603, 44.62646484375001],[-21.596150576461426, 43.72558593750001],[-21.391704731036587, 43.57177734375001],[-21.3303150734318, 43.06640625000001],[-21.08450008351734, 43.13232421875],[-20.46818922264095, 42.5830078125],[-20.447602397594167, 42.49511718750001],[-20.2209657795223, 41.85791015625001],[-20.694461597907797, 41.83593750000001],[-21.04349121680354, 42.49511718750001],[-21.350781150679722, 42.5390625],[-21.53484700204879, 42.20947265625],[-21.94304553343818, 41.81396484375001],[-22.309425841200177, 41.61621093750001],[-22.79643932091949, 41.77001953125001],[-23.180763583129433, 42.18750000000001],[-23.180763583129433, 41.33056640625001],[-23.463246331550348, 41.15478515625001],[-23.221154981846556, 40.29785156250001],[-22.998851594142923, 40.14404296875],[-23.28171917560002, 39.77050781250001],[-23.200960808078566, 39.46289062500001],[-22.715390019335942, 39.57275390625001],[-22.61401087437028, 39.35302734375001],[-22.958393318086348, 38.71582031250001],[-22.75592068148639, 38.0126953125],[-22.836945920943855, 37.59521484375001],[-23.32208001137844, 37.08984375000001],[-23.624394569716923, 36.60644531250001],[-23.966175871265044, 36.49658203125001],[-23.745125865762923, 35.63964843750001],[-23.261534167651835, 35.57373046875001],[-22.512556954051437, 35.92529296875001],[-22.28909641872305, 35.50781250000001],[-22.695120184965695, 35.20019531250001],[-22.39071391683855, 34.60693359375001],[-21.555284406923178, 34.60693359375001],[-21.47351753334985, 34.23339843750001],[-21.637005211106306, 34.14550781250001],[-21.922663209325922, 33.42041015625001],[-20.715015145512098, 33.13476562500001],[-20.797201434306984, 32.67333984375001],[-20.427012814257385, 32.21191406250001],[-20.50935458871459, 31.728515625000004],[-20.097206227083888, 31.354980468750004],[-20.159098270646922, 31.157226562500004],[-19.62189218031936, 30.432128906250004],[-19.394067895396613, 30.498046875000004],[-19.290405639497994, 30.036621093750004],[-19.103648251663632, 29.860839843750004],[-19.16592425362801, 29.531250000000004],[-18.81271785640776, 29.421386718750004],[-18.750309813140653, 29.267578125000004],[-18.375379094031825, 29.531250000000004],[-18.417078658661257, 29.794921875000004],[-17.853290114098012, 29.926757812500004],[-17.790535393588964, 30.014648437500004],[-17.35063837604883, 29.948730468750004],[-17.056784609942554, 30.102539062500004],[-17.09879223767869, 30.849609375000004],[-16.762467717941604, 31.289062500000004],[-16.509832826905836, 31.333007812500004],[-16.13026201203474, 31.970214843750004],[-15.60187487673981, 31.794433593750004],[-15.029685756555674, 32.71728515625001],[-14.859850400601037, 32.58544921875001],[-14.093957177836224, 32.84912109375001],[-13.85941386907402, 32.65136718750001],[-13.517837674890671, 32.80517578125001],[-13.19716452328198, 32.73925781250001],[-12.768946439455943, 33.00292968750001],[-12.490213662533307, 32.84912109375001]];
+var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
+
+var latlngs = [[-16.909683615558635, 60.13916015625001],[-17.07778960654537, 60.33691406250001],[-17.581194026506008, 60.16113281250001],[-17.811456088564473, 60.13916015625001],[-17.978733095556155, 60.46875000000001],[-18.18760655249461, 60.44677734375001],[-18.35452552912665, 60.82031250000001],[-18.81271785640776, 60.38085937500001],[-18.999802829053262, 60.75439453125001],[-18.8335153964335, 60.97412109375001],[-18.979025953255267, 61.32568359375001],[-19.228176737766248, 61.28173828125001],[-19.49766416813904, 61.76513671875001],[-19.808054128088575, 61.54541015625],[-20.159098270646922, 61.74316406250001],[-20.05593126519445, 61.87500000000001],[-20.447602397594167, 62.20458984375001],[-20.632784250388028, 61.94091796875001],[-20.879342971957897, 62.44628906250001],[-21.186972714123762, 62.02880859375001],[-21.350781150679722, 62.05078125000001],[-21.453068633086772, 61.63330078125001],[-21.963424936844223, 61.74316406250001],[-22.91792293614603, 62.40234375000001],[-22.715390019335942, 62.92968750000001],[-22.91792293614603, 63.50097656250001],[-23.301901124188877, 63.50097656250001],[-23.664650731631625, 63.61083984375001],[-23.624394569716923, 63.98437500000001],[-23.644524198573677, 64.88525390625001],[-23.56398712845123, 65.32470703125001],[-23.68477416688374, 65.54443359375001],[-23.624394569716923, 65.93994140625001],[-23.32208001137844, 66.00585937500001],[-23.34225583513053, 66.33544921875001],[-23.019076187293035, 67.08251953125001],[-22.59372606392931, 67.30224609375001],[-22.735656852206496, 67.52197265625001],[-22.59372606392931, 67.89550781250001],[-22.836945920943855, 68.26904296875001],[-22.411028521558706, 68.40087890625001],[-22.39071391683855, 68.84033203125001],[-21.90227796666864, 68.55468750000001],[-21.637005211106306, 68.75244140625001],[-21.69826549685252, 69.03808593750001],[-21.08450008351734, 69.27978515625001],[-21.06399706324597, 69.52148437500001],[-20.632784250388028, 69.41162109375001],[-20.34462694382967, 69.56542968750001],[-20.365227537412448, 69.82910156250001],[-19.99399846948549, 70.20263671875001],[-19.704657579362323, 70.09277343750001],[-19.394067895396613, 70.02685546875001],[-19.228176737766248, 70.15869140625001],[-18.95824648598139, 70.20263671875001],[-18.79191774423444, 70.53222656250001],[-18.47960905583197, 70.59814453125001],[-18.375379094031825, 70.90576171875001],[-18.50044745847508, 71.10351562500001],[-18.375379094031825, 71.67480468750001],[-17.99963161491187, 71.27929687500001],[-17.602139123350838, 71.54296875000001],[-17.392579271057766, 71.74072265625001],[-17.161785912715136, 71.71875000000001],[-16.97274101999902, 71.45507812500001],[-16.46769474828897, 71.87255859375001],[-16.1724728083975, 71.56494140625001],[-15.876809064146757, 72.15820312500001],[-15.686509572551422, 72.07031250000001],[-15.496032414238622, 72.24609375000001],[-15.5172052563298, 72.64160156250001],[-15.093339268117337, 72.79541015625001],[-15.050905707724771, 73.21289062500001],[-14.604847155053898, 72.92724609375001],[-14.41340016520608, 73.08105468750001],[-14.157881896141461, 74.37744140625001],[-13.944729974920167, 74.17968750000001],[-14.179186142354169, 73.67431640625001],[-13.795406203132826, 73.52050781250001],[-13.7313809749427, 73.05908203125001],[-13.88074584202559, 72.61962890625001],[-13.368243250897287, 72.22412109375001],[-13.688687769784968, 71.80664062500001],[-13.517837674890671, 71.67480468750001],[-13.282718960896405, 71.36718750000001],[-13.004557745339769, 71.52099609375001],[-12.747516274952714, 70.99365234375001],[-12.490213662533307, 71.10351562500001],[-12.64033830684679, 71.65283203125001],[-12.46876014482322, 71.96044921875001],[-12.017830337768213, 72.09228515625001],[-12.082295837363578, 71.76269531250001],[-11.652236404115387, 71.43310546875001],[-11.436955216143177, 71.60888671875001],[-11.695272733029402, 72.24609375000001],[-11.458490752653873, 72.55371093750001],[-11.6737554034334, 72.75146484375001],[-11.28616076875259, 73.21289062500001],[-11.092165893502, 73.54248046875001],[-10.617418067950307, 73.34472656250001],[-10.552621801948721, 72.75146484375001],[-10.250059987303004, 72.42187500000001],[-10.293301000109102, 72.22412109375001],[-9.86062814536589, 71.98242187500001],[-10.077037154404719, 71.76269531250001],[-9.622414142924805, 71.45507812500001],[-9.730714305756942, 71.14746093750001],[-9.600749932246847, 70.86181640625001],[-9.42738661503235, 70.44433593750001],[-9.25393615681445, 70.42236328125001],[-9.080400104155315, 70.64208984375001],[-8.68963906812765, 70.53222656250001],[-8.559293903302025, 70.57617187500001],[-8.320212289522944, 70.42236328125001],[-8.146242825034385, 70.55419921875001],[-7.645664723491027, 70.40039062500001],[-7.536764322084078, 70.20263671875001],[-7.318881730366743, 70.13671875000001],[-7.231698708367139, 69.80712890625001],[-7.667441482726056, 69.56542968750001],[-7.950436835029361, 69.76318359375001],[-8.385431015567708, 69.52148437500001],[-8.124491290861192, 69.16992187500001],[-7.863381805309173, 69.19189453125001],[-7.645664723491027, 69.38964843750001],[-7.297087564171992, 69.19189453125001],[-7.340674831854912, 68.77441406250001],[-7.297087564171992, 68.48876953125001],[-7.645664723491027, 68.29101562500001],[-7.972197714386866, 68.35693359375001],[-8.298470297067356, 67.98339843750001],[-7.819847426192575, 67.63183593750001],[-7.885147283424331, 67.45605468750001],[-7.667441482726056, 66.97265625000001],[-7.754537346539373, 66.88476562500001],[-7.253496050069527, 66.18164062500001],[-6.7737162387535, 65.93994140625001],[-6.599130675207247, 66.07177734375001],[-6.380812331938274, 66.53320312500001],[-5.98760689165826, 66.37939453125001],[-5.98760689165826, 65.80810546875001],[-5.637852598770853, 65.80810546875001],[-5.462895560209544, 65.89599609375001],[-5.0909441750333855, 65.85205078125001],[-4.937724274302479, 66.15966796875001],[-4.653079918274038, 66.35742187500001],[-4.54357027937176, 66.77490234375001],[-4.36832042087623, 66.90673828125001],[-4.236856059768947, 67.12646484375001],[-3.8861770336993486, 67.47802734375001],[-4.083452772038619, 67.71972656250001],[-3.9957805129630253, 67.89550781250001],[-3.9957805129630253, 68.35693359375001],[-3.7765593098768635, 68.31298828125001],[-3.6449998008920375, 68.09326171875001],[-3.2940822283128046, 68.29101562500001],[-3.228271011252635, 68.46679687500001],[-3.0308121226643703, 68.70849609375001],[-2.5479878714713835, 68.53271484375001],[-2.1747705722118864, 68.90625000000001],[-1.99910598312332, 68.77441406250001],[-1.6477220517969224, 68.79638671875001],[-1.669685500986571, 68.20312500000001],[-1.0106897682409002, 67.69775390625001],[-1.252341676699616, 67.32421875000001],[-0.6811362994451107, 66.92871093750001],[-0.7250783020332547, 66.55517578125001],[-1.1425024037061522, 66.31347656250001],[-1.0546279422758742, 65.87402343750001],[-0.9008417889908868, 65.78613281250001],[-0.615222552406841, 65.93994140625001],[-0.15380840901698828, 65.56640625000001],[-0.08789059053082422, 64.97314453125001],[-0.17578097424708533, 64.59960937500001],[-0.37353251022880474, 64.57763671875001],[-0.17578097424708533, 64.18212890625001],[-0.24169850190163725, 63.85253906250001],[0.10986321392741416, 63.63281250000001],[0.2856433479945185, 62.86376953125001],[0.08789059053082422, 62.51220703125001],[0.3076157096439005, 62.11669921875001],[0.5273363048115169, 62.07275390625001],[0.4833927027896987, 61.63330078125001],[0.9667509997666425, 61.58935546875001],[0.7909904981540058, 60.82031250000001],[0.7470491450051796, 59.63378906250001],[-0.19775351362548124, 59.76562500000001],[-0.4614207935306084, 59.37011718750001],[-0.19775351362548124, 59.10644531250001],[-0.9228116626856938, 58.84277343750001],[-0.5053645409602877, 58.42529296875001],[-0.7031073524364783, 58.16162109375],[-0.7470491450051796, 57.72216796875001],[-1.1425024037061522, 57.70019531250001],[-1.2303741774326018, 57.41455078125001],[-1.5818302639606454, 57.28271484375001],[-1.9332268264771106, 57.32666015625001],[-2.1308562777325184, 57.8759765625],[-2.811371193331128, 57.81005859375001],[-3.2721456350750127, 57.94189453125001],[-3.579212785860631, 57.45849609375001],[-3.930020157111463, 57.48046875000001],[-4.105369348495166, 57.2607421875],[-3.9519408561575817, 56.93115234375],[-4.434044005032582, 56.71142578125001],[-4.390228926463384, 56.53564453125001],[-4.784468966579362, 56.25000000000001],[-5.244127581489541, 56.35986328125001],[-5.462895560209544, 55.98632812500001],[-5.353521355337321, 55.34912109375001],[-5.484768018141262, 55.06347656250001],[-4.872047700241915, 54.93164062500001],[-4.850154078505659, 54.22851562500001],[-5.353521355337321, 53.92089843750001],[-5.134714634014442, 53.48144531250001],[-5.397273407690904, 53.15185546875001],[-5.8127569137510084, 52.9541015625],[-6.075011000682009, 53.41552734375001],[-6.140554782450295, 53.78906250000001],[-6.620957270326323, 54.36035156250001],[-7.362466865535738, 54.90966796875001],[-8.86336203355168, 56.66748046875001],[-9.318990192397917, 57.50244140625001],[-9.145486056167277, 58.07373046875001],[-9.188870084473393, 58.51318359375001],[-9.66573839518868, 59.04052734375001],[-10.12030163217392, 58.99658203125001],[-10.790140750321738, 59.34814453125001],[-11.73830237143684, 59.65576171875001],[-12.683214911818654, 61.54541015625],[-13.21855594917547, 62.40234375000001],[-13.304102866767076, 63.36914062500001],[-13.752724664396988, 64.24804687500001],[-14.647368383896618, 64.77539062500001],[-15.792253570362446, 64.46777343750001],[-16.509832826905836, 64.00634765625001],[-17.056784609942554, 62.97363281250001],[-16.63619187839765, 62.75390625000001],[-16.088042220148807, 62.20458984375001],[-15.876809064146757, 61.85302734375],[-15.919073517982413, 61.39160156250001],[-16.235772090429844, 60.75439453125001],[-16.573022719182777, 60.24902343750001]];
+var polygon = L.polygon(latlngs, {color: 'purple'}).addTo(map);
+
+var latlngs = [[28.844673680771795, 50.11962890625001],[28.22697003891834, 50.11962890625001],[27.819644755099446, 50.25146484375001],[27.819644755099446, 50.55908203125001],[27.644606381943326, 50.58105468750001],[27.410785702577023, 50.2294921875],[27.0982539061379, 50.69091796875001],[26.72598681227178, 50.75683593750001],[26.56887654795065, 51.19628906250001],[26.352497858154024, 51.37207031250001],[26.155437968713574, 51.1083984375],[26.155437968713574, 50.88867187500001],[25.760319754713887, 50.82275390625],[25.58208527870072, 50.99853515625001],[25.46311452925943, 50.69091796875001],[25.34402602913433, 50.55908203125001],[24.786734541988906, 50.86669921875001],[24.44714958973082, 50.60302734375001],[24.126701958681682, 50.8447265625],[23.684774166883756, 50.60302734375001],[23.624394569716923, 50.33935546875001],[23.38259828417886, 50.33935546875001],[23.36242859340884, 49.8779296875],[22.958393318086348, 49.8779296875],[22.79643932091949, 49.306640625],[22.471954507739227, 49.35058593750001],[22.28909641872305, 48.91113281250001],[22.004174972902003, 48.91113281250001],[21.861498734372567, 48.36181640625],[21.575718932458493, 48.36181640625],[21.4121622297254, 48.6474609375],[21.14599216495789, 48.55957031250001],[20.940919670394646, 48.22998046875001],[20.46818922264095, 47.90039062500001],[20.612219573881042, 47.54882812500001],[20.34462694382967, 47.48291015625],[20.138470312451155, 47.57080078125001],[19.72534224805787, 47.19726562500001],[19.559790136497412, 47.54882812500001],[19.290405639497994, 47.4609375],[19.062117883514652, 47.57080078125001],[18.771115062337024, 47.50488281250001],[18.312810846425457, 47.02148437500001],[18.625424540701264, 46.51611328125],[18.500447458475094, 46.36230468750001],[18.500447458475094, 45.94482421875],[18.25021997706561, 45.615234375],[17.978733095556183, 45.68115234375001],[17.706828124019555, 45.32958984375],[17.24574420800713, 45.02197265625],[17.28770905062193, 44.84619140625001],[17.056784609942554, 44.6484375],[16.804541076383455, 44.71435546875],[16.636191878397664, 44.16503906250001],[16.594081412718474, 44.16503906250001],[16.636191878397664, 43.72558593750001],[16.024695711685315, 43.72558593750001],[15.834535741221565, 43.26416015625001],[15.538375926292062, 43.04443359375001],[15.114552871944115, 42.64892578125001],[14.774882506516272, 42.62695312500001],[14.626108798876851, 42.09960937500001],[14.179186142354181, 42.07763671875001],[14.221788628397572, 41.70410156250001],[13.902075852500495, 41.52832031250001],[13.282718960896418, 40.73730468750001],[12.683214911818666, 40.93505859375001],[12.46876014482322, 40.84716796875001],[12.876069959946507, 40.25390625000001],[12.768946439455956, 39.88037109375001],[13.282718960896418, 39.77050781250001],[12.897489183755892, 39.02343750000001],[13.346865014577924, 38.80371093750001],[13.047372256948787, 38.23242187500001],[12.983147716796578, 38.0126953125],[14.5410498980604, 37.37548828125001],[14.668625907385914, 36.93603515625001],[15.538375926292062, 36.34277343750001],[15.792253570362446, 36.23291015625001],[16.783505561927786, 37.61718750000001],[17.685895196738677, 36.84814453125001],[18.291949733550336, 36.84814453125001],[18.542116654448996, 36.78222656250001],[18.97902595325528, 37.02392578125001],[19.20742852680121, 37.41943359375001],[20.632784250388028, 36.69433593750001],[20.899871347076424, 37.00195312500001],[20.488773287109836, 38.84765625000001],[20.96143961409684, 39.35302734375001],[20.92039691397189, 40.07812500000001],[21.350781150679737, 40.47363281250001],[21.841104749065057, 40.64941406250001],[22.14670778001263, 40.64941406250001],[22.85719470096965, 40.05615234375001],[23.140359987886118, 40.05615234375001],[23.483400654325642, 40.10009765625001],[23.825551306884773, 40.29785156250001],[24.126701958681682, 40.67138671875001],[24.246964554300938, 40.97900390625001],[24.5271348225978, 41.11083984375001],[25.224820176765036, 40.60546875000001],[25.145284610685064, 40.166015625],[24.746831298412058, 39.83642578125],[24.32707654001865, 39.11132812500001],[24.407137917727667, 38.67187500000001],[25.224820176765036, 37.88085937500001],[25.34402602913433, 37.39746093750001],[25.423431426334247, 36.23291015625001],[25.878994400196202, 35.33203125000001],[26.62781822639305, 35.20019531250001],[27.235094607795503, 35.41992187500001],[27.566721430409736, 35.96923828125001],[27.410785702577023, 36.58447265625001],[26.92206991673282, 37.50732421875001],[26.254009699865737, 38.34228515625001],[25.760319754713887, 39.13330078125001],[26.07652055985697, 39.44091796875001],[26.56887654795065, 39.66064453125001],[27.0982539061379, 39.57275390625001],[27.702983735525862, 39.66064453125001],[28.01380137638074, 40.18798828125001],[27.800209937418252, 41.02294921875001],[27.01998400798257, 41.28662109375001],[26.391869671769022, 41.83593750000001],[25.918526162075153, 43.24218750000001],[26.194876675795218, 43.72558593750001],[26.509904531413927, 44.40673828125],[26.72598681227178, 45.48339843750001],[27.196014383173306, 46.2744140625],[27.664068965384516, 47.08740234375001],[28.01380137638074, 48.12011718750001],[28.555576049185973, 48.36181640625],[28.92163128242129, 48.77929687500001],[29.15216128331894, 49.24072265625001],[29.305561325527698, 49.921875]];
+var polygon = L.polygon(latlngs, {color: 'green'}).addTo(map);
+
+var latlngs = [[-11.178401873711772, 8.195800781250002],[-10.639013775260524, 8.261718750000002],[-10.725381285457912, 8.525390625000002],[-10.18518740926906, 8.701171875000002],[-10.379765224421455, 8.986816406250002],[-10.163560279490476, 9.184570312500002],[-10.077037154404719, 9.470214843750002],[-10.941191793456522, 10.04150390625],[-10.876464994816283, 10.502929687500002],[-11.005904459659451, 10.78857421875],[-11.39387923296741, 11.074218750000002],[-11.458490752653873, 11.359863281250002],[-10.962764256386821, 11.62353515625],[-11.156845275211767, 11.93115234375],[-11.027472194117934, 12.32666015625],[-11.178401873711772, 12.436523437500002],[-10.984335146101955, 12.678222656250002],[-10.509416700845861, 12.875976562500002],[-10.552621801948721, 13.139648437500002],[-10.09867012060338, 13.139648437500002],[-10.18518740926906, 13.732910156250002],[-10.466205555063867, 13.908691406250002],[-10.639013775260524, 14.150390625000002],[-10.746969318459989, 14.436035156250002],[-10.725381285457912, 14.831542968750002],[-10.379765224421455, 14.853515625000002],[-10.228437266155943, 15.139160156250002],[-10.466205555063867, 15.446777343750002],[-10.444597722834875, 15.578613281250002],[-10.01212955790814, 15.754394531250002],[-9.318990192397917, 15.490722656250002],[-8.993600464280018, 14.897460937500002],[-8.363692651835823, 15.139160156250002],[-7.928674801364035, 14.326171875000002],[-8.080984688871991, 13.996582031250002],[-8.581021215641842, 13.579101562500002],[-8.624472107633936, 13.095703125],[-8.77651071605234, 12.744140625000002],[-8.798225459016345, 11.645507812500002],[-8.254982704877863, 11.337890625],[-8.18974234438369, 11.052246093750002],[-8.341953075466805, 10.634765625],[-8.515835561202218, 10.458984375000002],[-8.450638800331001, 10.217285156250002],[-7.885147283424331, 10.063476562500002],[-7.667441482726056, 9.799804687500002],[-7.798078531355303, 9.42626953125],[-7.928674801364035, 9.140625000000002],[-8.059229627200192, 8.701171875000002],[-8.059229627200192, 8.305664062500002],[-7.689217127736178, 8.217773437500002],[-7.1226962775182825, 8.349609375000002],[-6.751896464843375, 8.217773437500002],[-6.620957270326323, 7.756347656250001],[-6.751896464843375, 7.404785156250001],[-7.231698708367139, 7.316894531250001],[-7.863381805309173, 7.250976562500001],[-8.254982704877863, 6.96533203125],[-8.819938928283147, 6.789550781250001],[-9.058702156392126, 5.910644531250001],[-9.102096738726443, 5.295410156250001],[-9.188870084473393, 4.768066406250001],[-9.622414142924805, 4.548339843750001],[-10.077037154404719, 4.833984375000001],[-10.509416700845861, 5.141601562500001],[-11.005904459659451, 5.449218750000001],[-11.329253026617318, 5.493164062500001],[-11.6737554034334, 5.646972656250001],[-12.103780891645817, 6.481933593750001],[-12.232654837013472, 7.207031250000001],[-11.867350911459308, 7.602539062500001],[-11.544616463449655, 8.020019531250002]];
+var polygon = L.polygon(latlngs, {color: 'orange'}).addTo(map);
+
+var latlngs = [[21.186972714123776, -9.008789062500002],[21.022982546427425, -8.657226562500002],[21.248422235627014, -8.481445312500002],[21.4121622297254, -8.591308593750002],[21.47351753334985, -8.129882812500002],[21.555284406923192, -7.932128906250001],[21.6778482933475, -7.624511718750001],[21.841104749065057, -7.734375000000001],[22.30942584120019, -7.448730468750001],[22.39071391683855, -7.119140625],[22.674847351188536, -7.185058593750001],[22.69512018496571, -6.987304687500001],[22.897683210648072, -6.987304687500001],[23.241346102386135, -6.767578125000001],[23.241346102386135, -6.635742187500001],[22.897683210648072, -6.5478515625],[22.79643932091949, -6.459960937500001],[22.69512018496571, -6.39404296875],[22.755920681486405, -6.240234375],[22.573438264572406, -5.888671875],[22.187404991398786, -5.712890625000001],[22.28909641872305, -5.493164062500001],[22.126354759919685, -5.273437500000001],[22.126354759919685, -5.163574218750001],[21.718679805703154, -4.94384765625],[21.309846141087203, -4.855957031250001],[20.797201434307, -4.416503906250001],[20.55050889419565, -4.394531250000001],[20.262197124246534, -4.174804687500001],[19.993998469485504, -4.218750000000001],[19.89072302399691, -3.9770507812500004],[19.476950206488414, -3.9550781250000004],[19.331878440818787, -4.042968750000001],[18.999802829053262, -4.042968750000001],[18.97902595325528, -3.8891601562500004],[18.70869162255995, -3.8891601562500004],[18.521283325496288, -3.9550781250000004],[18.271086109608888, -3.8452148437500004],[18.145851771694467, -3.8232421875000004],[17.853290114098012, -3.5815429687500004],[17.706828124019555, -3.5375976562500004],[17.497389400663835, -3.7353515625000004],[17.18277905643184, -3.6035156250000004],[17.07778960654538, -3.6474609375000004],[16.804541076383455, -3.4277343750000004],[16.615137799987075, -3.5375976562500004],[16.29905101458183, -3.3618164062500004],[16.214674588248556, -3.40576171875],[16.04581345375218, -3.2958984375000004],[15.665354182093287, -3.2958984375000004],[15.474857402687254, -3.2958984375000004],[15.411319377981005, -3.4716796875000004],[14.774882506516272, -3.8891601562500004],[13.239945499286312, -4.702148437500001],[12.039320557540572, -5.844726562500001],[13.389619591747607, -7.207031250000001],[14.3069694978258, -9.052734375000002]];
+var polygon = L.polygon(latlngs, {color: 'blue'}).addTo(map);
+
+var latlngs = [[32.11980111179328, -6.08642578125],[32.21280106801518, -6.701660156250001],[32.39851580247402, -6.833496093750001],[32.47269502206151, -6.96533203125],[32.657875736955305, -6.96533203125],[32.7872745269555, -7.141113281250001],[32.91648534731439, -7.141113281250001],[32.99023555965106, -7.338867187500001],[33.211116472416855, -7.382812500000001],[33.52307880890422, -7.426757812500001],[33.54139466898275, -7.646484375000001],[33.687781758439364, -7.668457031250001],[33.687781758439364, -7.426757812500001],[33.88865750124075, -7.119140625],[34.10725639663121, -7.207031250000001],[34.17999758688084, -7.27294921875],[34.34343606848294, -7.338867187500001],[34.397844946449865, -7.492675781250001],[34.50655662164561, -7.492675781250001],[34.470335121217495, -7.338867187500001],[34.57895241036948, -7.294921875000001],[34.72355492704221, -7.404785156250001],[34.903952965590065, -7.404785156250001],[35.17380831799959, -7.558593750000001],[35.17380831799959, -7.492675781250001],[35.0659731379842, -7.27294921875],[35.29943548054545, -7.097167968750001],[35.33529320309331, -6.943359375000001],[35.42486791930558, -6.921386718750001],[35.585851593232356, -6.767578125000001],[35.37113502280101, -6.50390625],[35.496456056584165, -6.39404296875],[35.496456056584165, -6.306152343750001],[35.889050079360935, -6.1962890625],[35.92464453144099, -6.35009765625],[36.06686213257888, -6.240234375],[35.995785386420344, -6.020507812500001],[36.35052700542766, -5.756835937500001],[36.40359962073253, -5.603027343750001],[36.2265501474709, -5.405273437500001],[36.43896124085948, -5.273437500000001],[36.43896124085948, -4.899902343750001],[36.474306755095235, -4.724121093750001],[36.686041276581925, -4.636230468750001],[36.61552763134925, -4.372558593750001],[36.686041276581925, -4.240722656250001],[36.61552763134925, -3.8891601562500004],[36.66841891894786, -3.6914062500000004],[36.63316209558658, -3.3618164062500004],[36.4566360115962, -3.09814453125],[36.50963615733049, -2.8125],[36.61552763134925, -2.8564453125000004],[36.56260003738548, -2.6147460937500004],[36.79169061907076, -2.2631835937500004],[36.59788913307022, -2.1093750000000004],[36.65079252503471, -1.8896484375000002],[36.36822190085111, -1.6918945312500002],[36.29741818650811, -1.6918945312500002],[36.06686213257888, -1.4501953125000002],[35.889050079360935, -1.4501953125000002],[35.81781315869664, -1.6699218750000002],[35.460669951495305, -1.5380859375000002],[35.17380831799959, -1.5380859375000002],[34.831841149828676, -1.40625],[34.63320791137959, -1.8017578125000002],[34.56085936708384, -1.77978515625],[34.43409789359469, -2.0434570312500004],[34.125447565116126, -2.0214843750000004],[33.94335994657882, -2.1533203125000004],[33.706062655101206, -2.1972656250000004],[33.46810795527896, -2.5268554687500004],[33.30298618122413, -2.65869140625],[33.100745405144245, -2.9443359375],[33.02708758002874, -3.2080078125000004],[32.80574473290688, -3.3178710937500004],[32.953368145799345, -3.5375976562500004],[32.953368145799345, -3.7353515625000004],[32.879587173066305, -3.8671875000000004],[33.08233672856376, -4.130859375000001],[32.861132322810974, -4.240722656250001],[32.99023555965106, -4.372558593750001],[32.953368145799345, -4.570312500000001],[33.137551192346145, -4.592285156250001],[33.15594830078649, -4.724121093750001],[33.100745405144245, -4.833984375000001],[32.93492866908233, -5.119628906250001],[32.80574473290688, -5.163574218750001],[32.80574473290688, -5.449218750000001],[32.657875736955305, -5.51513671875]];
+var polygon = L.polygon(latlngs, {color: 'yellow'}).addTo(map);
+
+var latlngs = [[23.543845136505844, -14.567871093750002],[23.483400654325642, -14.348144531250002],[23.725011735951796, -14.304199218750002],[23.725011735951796, -14.128417968750002],[23.98625259984181, -14.172363281250002],[24.00632619875113, -14.106445312500002],[24.226928664976377, -14.260253906250002],[24.26699728841818, -14.172363281250002],[24.44714958973082, -14.128417968750002],[24.587090339209634, -13.996582031250002],[24.726874870506972, -13.974609375000002],[24.70691524106633, -13.820800781250002],[24.84656534821976, -13.820800781250002],[24.906367237907997, -13.710937500000002],[25.085598897064777, -13.710937500000002],[25.18505888358067, -13.688964843750002],[25.20494115356912, -13.491210937500002],[25.443274612305746, -13.46923828125],[25.760319754713887, -13.645019531250002],[25.898761936567023, -13.645019531250002],[25.799891182088334, -13.46923828125],[25.898761936567023, -13.337402343750002],[26.03704188651584, -13.403320312500002],[26.293415004265796, -13.3154296875],[26.52956523826758, -13.293457031250002],[26.70635985763354, -13.139648437500002],[26.82407078047018, -13.16162109375],[27.15692045688088, -12.832031250000002],[27.410785702577023, -12.875976562500002],[27.449790329784214, -12.810058593750002],[27.916766641249065, -12.94189453125],[27.994401411046148, -12.985839843750002],[28.24632797104887, -13.029785156250002],[28.38173504322311, -13.073730468750002],[28.51696944040106, -13.095703125],[28.536274512989916, -13.205566406250002],[28.65203063036226, -13.271484375000002],[28.729130483430154, -13.46923828125],[28.844673680771795, -13.535156250000002],[28.9600886880068, -13.77685546875],[28.86391842622456, -18.566894531250004],[27.78077164334822, -18.632812500000004],[27.15692045688088, -18.742675781250004],[26.254009699865737, -18.874511718750004],[25.403584973186703, -18.962402343750004],[24.926294766395593, -19.379882812500004],[24.16680208530324, -19.665527343750004],[23.523700058824144, -19.511718750000004],[23.221154981846556, -18.742675781250004],[23.03929774776974, -17.380371093750004],[23.01907618729305, -16.193847656250004],[23.120153621695614, -15.270996093750002]];
+var polygon = L.polygon(latlngs, {color: 'pink'}).addTo(map);
+
+var latlngs = [[12.940322128384627, -49.39453125000001],[12.983147716796578, -50.27343750000001],[12.46876014482322, -50.44921875000001],[12.425847783029134, -50.93261718750001],[12.039320557540572, -51.54785156250001],[11.781325296112277, -51.416015625],[11.221510260010541, -52.0751953125],[10.703791711680736, -51.81152343750001],[10.228437266155955, -52.646484375],[9.838979375579344, -52.47070312500001],[9.665738395188692, -52.82226562500001],[9.232248799418674, -53.34960937500001],[8.928487062665504, -53.26171875],[8.624472107633936, -53.74511718750001],[8.189742344383703, -53.83300781250001],[8.276727101164047, -54.66796875000001],[7.841615185204699, -55.37109375000001],[7.885147283424331, -55.85449218750001],[8.059229627200192, -56.16210937500001],[7.318881730366756, -56.29394531250001],[8.363692651835823, -57.17285156250001],[7.754537346539386, -57.21679687500001],[8.015715997869071, -57.65625000000001],[7.667441482726068, -57.96386718750001],[6.970049417296232, -57.568359375],[7.013667927566642, -57.96386718750001],[6.271618064314864, -57.74414062500001],[6.446317749457659, -57.34863281250001],[6.053161295714067, -56.99707031250001],[6.009459238059562, -56.73339843750001],[4.915832801313164, -56.16210937500001],[4.740675384778373, -56.68945312500001],[4.039617826768437, -56.82128906250001],[3.6888551431470478, -57.08496093750001],[3.162455530237848, -56.55761718750001],[2.723583083348398, -57.17285156250001],[1.9332268264771233, -57.21679687500001],[1.4061088354351594, -57.61230468750001],[1.4061088354351594, -58.09570312500001],[0.9228116626857066, -58.13964843750001],[0.615222552406841, -58.31542968750001],[-0.04394530819134536, -57.74414062500001],[-0.4394488164139641, -58.09570312500001],[-0.8788717828324148, -57.70019531250001],[-0.5712795966325395, -57.2607421875],[-1.0106897682409002, -56.82128906250001],[-2.460181181020993, -55.94238281250001],[-2.8991526985043006, -56.29394531250001],[-3.3818237353282767, -55.85449218750001],[-4.214943141390639, -55.45898437500001],[-4.214943141390639, -54.93164062500001],[-4.8282597468669755, -55.19531250000001],[-5.0909441750333855, -54.93164062500001],[-6.0968598188879355, -54.4921875],[-5.9657536710655235, -54.09667968750001],[-6.140554782450295, -53.39355468750001],[-6.489983332670651, -53.26171875],[-6.708253968671543, -52.29492187500001],[-6.664607562172573, -52.20703125000001],[-6.751896464843375, -51.24023437500001],[-6.402648405963884, -50.8447265625],[-6.489983332670651, -50.4931640625],[-6.18424616128059, -50.14160156250001],[-5.703447982149503, -50.185546875],[-5.9657536710655235, -49.08691406250001],[-5.7908968128719565, -48.77929687500001],[-6.271618064314864, -48.3837890625],[-5.659718554577286, -48.33984375],[-5.878332109674314, -47.81250000000001],[-5.659718554577286, -47.68066406250001],[-5.528510525692789, -47.28515625000001],[-5.528510525692789, -46.8017578125],[-5.00339434502215, -46.36230468750001],[-5.178482088522876, -46.23046875],[-4.784468966579362, -45.263671875],[-4.784468966579362, -45],[-4.477856485570586, -44.82421875000001],[-4.477856485570586, -43.76953125],[-3.9519408561575817, -43.28613281250001],[-3.9519408561575817, -43.02246093750001],[-3.425691524418062, -42.5830078125],[-3.601142320158722, -42.275390625],[-2.986927393334863, -42.275390625],[-3.074695072369682, -41.35253906250001],[-3.0308121226643703, -40.69335937500001],[-2.811371193331128, -40.56152343750001],[-2.460181181020993, -40.34179687500001],[-2.108898659243126, -40.25390625000001],[-1.8893059628373186, -39.94628906250001],[-1.4500404973607948, -39.55078125],[-1.0106897682409002, -39.68261718750001],[-0.5712795966325395, -39.77050781250001],[-0.04394530819134536, -39.50683593750001],[-0.21972602392080884, -38.97949218750001],[-0.04394530819134536, -38.49609375000001],[0.4394488164139768, -37.96875000000001],[1.0106897682409128, -36.87011718750001],[1.2303741774326145, -36.87011718750001],[1.4061088354351594, -36.34277343750001],[1.6696855009865839, -36.12304687500001],[1.4939713066293239, -35.63964843750001],[1.1864386394452024, -35.24414062500001],[1.7136116598836224, -35.11230468750001],[2.4601811810210052, -34.98046875000001],[4.214943141390651, -32.73925781250001],[6.35897532723566, -31.289062500000004],[8.885071663468993, -31.508789062500004],[11.996338401936226, -31.860351562500004],[14.689881366618774, -32.91503906250001],[17.811456088564483, -36.91406250000001],[19.186677697957833, -41.96777343750001],[19.352610894378625, -45.6591796875],[19.186677697957833, -49.08691406250001],[17.936928637549443, -50.36132812500001],[16.172472808397515, -50.185546875],[14.817370620155266, -49.5703125]];
+var polygon = L.polygon(latlngs, {color: 'black'}).addTo(map);
+
+var latlngs = [[-26.62781822639306, -61.30371093750001],[-25.878994400196202, -60.95214843750001],[-25.839449402063185, -60.29296875000001],[-25.443274612305746, -60.16113281250001],[-25.324166525738384, -59.76562500000001],[-24.926294766395593, -59.67773437500001],[-24.487148563173424, -59.23828125000001],[-23.68477416688374, -59.50195312500001],[-22.836945920943855, -59.23828125000001],[-22.836945920943855, -59.45800781250001],[-22.43134015636061, -59.67773437500001],[-21.94304553343818, -59.41406250000001],[-21.616579336740603, -58.27148437500001],[-20.797201434306984, -58.18359375],[-20.262197124246534, -58.27148437500001],[-19.932041306115526, -57.74414062500001],[-19.642587534013032, -57.12890625000001],[-20.014645445341355, -57.21679687500001],[-20.3034175184893, -57.04101562500001],[-20.50935458871459, -57.30468750000001],[-20.879342971957897, -56.99707031250001],[-21.248422235627014, -57.30468750000001],[-22.105998799750566, -56.73339843750001],[-23.28171917560002, -56.25000000000001],[-23.28171917560002, -55.37109375000001],[-23.926013033021192, -54.44824218750001],[-25.005972656239177, -53.34960937500001],[-25.403584973186703, -53.39355468750001],[-25.60190226111574, -53.04199218750001],[-25.125392611512016, -52.77832031250001],[-24.96614015991296, -52.0751953125],[-25.16517336866393, -51.767578125],[-24.926294766395593, -51.4599609375],[-24.5271348225978, -51.416015625],[-24.607069137709694, -51.15234375],[-24.046463999666567, -51.06445312500001],[-23.68477416688374, -50.4931640625],[-23.68477416688374, -49.8779296875],[-23.120153621695614, -50.09765625000001],[-23.200960808078566, -49.48242187500001],[-22.75592068148639, -49.70214843750001],[-22.91792293614603, -49.17480468750001],[-22.39071391683855, -48.73535156250001],[-22.512556954051437, -48.47167968750001],[-22.06527806776582, -48.3837890625],[-21.820707853875017, -48.076171875],[-21.12549763660628, -47.50488281250001],[-21.453068633086772, -47.1533203125],[-21.94304553343818, -47.32910156250001],[-21.90227796666864, -46.8017578125],[-22.59372606392931, -46.23046875],[-22.958393318086348, -46.75781250000001],[-23.079731762449878, -46.75781250000001],[-23.40276490540795, -47.06542968750001],[-23.68477416688374, -46.93359375000001],[-24.44714958973082, -47.28515625000001],[-24.766784522874442, -47.06542968750001],[-25.085598897064763, -47.59277343750001],[-25.641526373065755, -47.724609375],[-25.878994400196202, -48.60351562500001],[-26.273714024406416, -48.55957031250001],[-26.35249785815401, -49.48242187500001],[-26.78484736105119, -49.52636718750001],[-27.01998400798257, -49.306640625],[-27.410785702577023, -49.70214843750001],[-27.098253906137884, -50.09765625000001],[-27.994401411046148, -50.62500000000001],[-28.536274512989916, -50.44921875000001],[-29.036960648558267, -51.02050781250001],[-30.03105542654022, -51.1083984375],[-29.84064389983441, -51.67968750000001],[-30.221101852485987, -51.85546875000001],[-30.221101852485987, -52.3828125],[-31.05293398570515, -52.51464843750001],[-31.203404950917385, -52.3388671875],[-32.8795871730663, -52.646484375],[-32.9164853473144, -53.92089843750001],[-32.39851580247402, -54.75585937500001],[-32.58384932565661, -55.15136718750001],[-32.1384086967725, -55.4150390625],[-32.02670629333614, -55.63476562500001],[-31.57853542647338, -55.85449218750001],[-31.765537409484374, -56.20605468750001],[-32.175612478499325, -56.25000000000001],[-32.06395559466041, -56.82128906250001],[-32.62087018318113, -57.65625000000001],[-32.9164853473144, -57.70019531250001],[-34.30714385628803, -57.30468750000001],[-35.88905007936092, -58.22753906250001],[-38.03078569382294, -59.32617187500001],[-39.130060242135094, -60.42480468750001],[-38.99357205820945, -62.53417968750001],[-37.09023980307207, -64.55566406250001],[-34.56085936708385, -66.75292968750001],[-32.36140331527542, -67.32421875000001],[-30.67571540416773, -66.26953125000001],[-29.57345707301757, -65.21484375000001],[-27.68352808378776, -63.54492187500001],[-26.82407078047018, -62.44628906250001]];
+var polygon = L.polygon(latlngs, {color: 'gold'}).addTo(map);
+
+var latlngs = [[20.20034600649375, -80.55175781250001],[20.55050889419565, -80.15625000000001],[20.715015145512098, -79.73876953125001],[20.488773287109836, -79.54101562500001],[20.69446159790781, -79.27734375000001],[20.92039691397189, -79.49707031250001],[21.289374355860424, -79.03564453125],[21.453068633086783, -78.53027343750001],[21.718679805703154, -78.59619140625001],[21.90227796666864, -78.4423828125],[22.228090416784486, -78.486328125],[22.674847351188536, -78.90380859375001],[22.85719470096965, -78.61816406250001],[22.816694126899844, -78.24462890625001],[22.87744046489714, -78.13476562500001],[22.836945920943855, -77.78320312500001],[23.160563309048314, -77.69531250000001],[23.443088931121785, -77.65136718750001],[23.684774166883756, -77.54150390625001],[23.745125865762933, -77.23388671875],[24.10664717920179, -77.08007812500001],[23.946096014998382, -76.57470703125],[23.785344805941214, -76.66259765625],[23.523700058824144, -76.5966796875],[23.32208001137844, -76.57470703125],[23.180763583129444, -76.88232421875001],[23.241346102386135, -77.12402343750001],[23.059516273509317, -77.12402343750001],[22.553147478403194, -76.5966796875],[22.065278067765835, -76.61865234375],[21.82070785387503, -76.44287109375001],[21.4121622297254, -76.640625],[21.43261686447735, -76.00341796875],[21.04349121680354, -75.95947265625],[20.8588117908677, -76.26708984375001],[20.55050889419565, -76.31103515625001],[20.34462694382967, -76.26708984375001],[20.34462694382967, -76.44287109375001],[19.9526963975442, -76.24511718750001],[19.9526963975442, -75.84960937500001],[19.621892180319374, -75.25634765625001],[19.352610894378625, -75.16845703125001],[19.041348796589013, -74.64111328125001],[19.02057711096681, -74.26757812500001],[18.687878686034182, -74.11376953125001],[18.47960905583198, -74.33349609375001],[18.562947442888312, -74.75097656250001],[18.312810846425457, -74.90478515625001],[18.208480196039893, -75.05859375000001],[17.853290114098012, -74.94873046875001],[17.45547257997284, -74.88281250000001],[17.497389400663835, -74.61914062500001],[17.035777250427195, -74.24560546875001],[16.678293098288513, -74.39941406250001],[16.551961721972525, -74.02587890625001],[16.36230951024085, -73.82812500000001],[16.193574826697848, -73.82812500000001],[16.109153239219467, -73.47656250000001],[15.665354182093287, -73.12500000000001],[15.792253570362446, -72.81738281250001],[15.644196600866072, -72.55371093750001],[15.771109173575294, -72.24609375000001],[15.686509572551435, -72.11425781250001],[15.220589019578128, -72.44384765625001],[14.817370620155266, -72.35595703125001],[14.817370620155266, -72.13623046875001],[14.477234210156519, -71.89453125000001],[14.349547837185375, -72.00439453125001],[13.902075852500495, -71.76269531250001],[13.496472765758964, -71.80664062500001],[13.32548488559795, -72.04833984375001],[13.132979019087484, -71.98242187500001],[12.961735843534306, -72.31201171875001],[12.533115357277163, -72.29003906250001],[12.382928338487396, -72.39990234375001],[11.931852326960579, -72.24609375000001],[11.910353555774114, -72.83935546875001],[11.609193407938953, -72.88330078125001],[11.501556900932487, -73.19091796875001],[11.005904459659451, -73.23486328125001],[10.811724143275528, -72.94921875000001],[10.444597722834875, -72.94921875000001],[10.444597722834875, -73.43261718750001],[11.049038346537106, -74.11376953125001],[11.501556900932487, -74.04785156250001],[11.781325296112277, -74.46533203125001],[11.845847044118496, -75.01464843750001],[11.716788389998475, -75.60791015625001],[12.146745814539685, -77.14599609375001],[13.068776734357694, -78.33251953125001],[14.392118083661728, -79.23339843750001],[16.13026201203477, -80.17822265625001],[18.124970639386515, -81.43066406250001],[18.833515396433512, -81.80419921875001]];
+var polygon = L.polygon(latlngs, {color: 'orange'}).addTo(map);
+
+
+marker.on('click', function(e) {
+    alert(e.latlng);
+});
+
+    map.on('click', function(e){ console.log('e', e.latlng);});
+
+    var textMarkersBig = [
+        {'html': 'Rakia', latlng: {lat: 33.925129700072, lng: -4.592285156250001} },
+        {'html': 'Alastair', latlng: {lat: 18.58377568837094, lng: -6.591796875000001} },
+        {'html': 'Karabi', latlng: {lat: -10.617418067950307, lng: 11.359863281250002} },
+        {'html': 'Seapoint', latlng: {lat: 21.12549763660629, lng: 44.97802734375} },
+        {'html': 'Macari', latlng: {lat: -11.264612212504428, lng: 64.90722656250001} },
+        {'html': 'Redarya', latlng: {lat: -13.539200668930816, lng: 43.76953125} },
+        {'html': 'Calibert', latlng:   {lat: -7.906912, lng: 34.365234} },
+        {'html': 'Blackcare', latlng:   {lat: 1.537901237431487, lng: -47.68066406250001} },
+        {'html': 'Wiletor', latlng:   {lat: -29.45873118535533, lng: -55.92041015625001} },
+        {'html': 'Derilan', latlng:   {lat: 15.072123545811683, lng: -75.54199218750001} },
+        {'html': 'Merktyne', latlng:   {lat: 24.726874870506972, lng: -15.622558593750002} }
+    ]
+
+    for(var i = 0; i < textMarkersBig.length; i++){
+        var icon =  L.divIcon({className: 'parallax-marker label big', html: textMarkersBig[i].html, iconSize: [200, 36], iconAnchor: [100, 18]});
+        L.Marker.parallax(textMarkersBig[i].latlng,{icon: icon, parallaxZoffset: 4}).addTo(map);
+    }
+
+    var textMarkersMedium = [
+        {'html': 'The Golden Sea', latlng: {lat: 31.952162238024975, lng: -53.26171875} },
+        {'html': 'Fardian Sea', latlng:  {lat: -42.16340342422401, lng: -89.47265625} },
+        {'html': 'The Harlian Mountains', latlng: {lat: 19.062117883514652, lng: 53.08593750000001} },
+        {'html': 'The Great Forest', latlng: {lat: 29.05616970274342, lng: -7.976074218750001} },
+        {'html': 'The Green Valley', latlng: {lat: -9.167178732976664, lng: 41.41845703125001} },
+        {'html': 'The Black Desert', latlng:  {lat: -4.258768357307995, lng: -57.67822265625001} },
+        {'html': 'The Grand Sea', latlng:  {lat: -0.5273363048115043, lng: 92.4609375} },
+        {'html': 'The Middle Sea', latlng:  {lat: -6.664607562172573, lng: -10.239257812500002} }
+    ]
+
+    for(var i = 0; i < textMarkersMedium.length; i++){
+        var icon =  L.divIcon({className: 'parallax-marker label medium', html: textMarkersMedium[i].html, iconSize: [200, 36], iconAnchor: [100, 18]});
+        L.Marker.parallax(textMarkersMedium[i].latlng,{icon: icon, parallaxZoffset: 1}).addTo(map);
+    }
+
+
+    var textMarkersSmall = [
+        {'html': 'Blackcare City', latlng: {lat: 7.013667927566642, lng: -45.6591796875} },
+        {'html': 'Laslubia', latlng: {lat: 25.423431426334247, lng: -17.797851562500004} },
+        {'html': 'Templetown', latlng: {lat: 35.585851593232356, lng: -2.3730468750000004} },
+        {'html': 'Garley', latlng: {lat: 16.699340234594537, lng: -7.712402343750001} },
+        {'html': 'Karabi City', latlng: {lat: -8.928487062665504, lng: 7.954101562500001} },
+        {'html': 'Oakwood Harbor', latlng:  {lat: 19.787380181986222, lng: 39.08935546875001} },
+        {'html': 'Creyroad', latlng:   {lat: -4.696879026871413, lng: 59.54589843750001} },
+        {'html': 'Lindsay', latlng:  {lat: -16.024695711685304, lng: 35.90332031250001} },
+        {'html': 'Arelia', latlng:  {lat: -33.54139466898275, lng: -62.64404296875001} },
+        {'html': 'Salvian', latlng:  {lat: 15.792253570362446, lng: -77.51953125000001} },
+        {'html': 'Imperia', latlng:   {lat: -8.320212, lng: 32.321777} }
+    ]
+
+    for(var i = 0; i < textMarkersSmall.length; i++){
+        var icon =  L.divIcon({className: 'parallax-marker label small', html: textMarkersSmall[i].html, iconSize: [200, 36], iconAnchor: [100, 18]});
+        L.Marker.parallax(textMarkersSmall[i].latlng,{icon: icon, parallaxZoffset: 0.2}).addTo(map);
+    }
+
+	var textMarkersHuge = [
+    	{'html': 'Vlenia Isles', latlng:  {lat: 34.597042, lng: -9.492188} },
+    	{'html': 'Fardin', latlng:  {lat: -6.489983, lng: -56.425781} },
+    	{'html': 'Eihidall', latlng:  {lat: -5.965754, lng: 43.417969} },
+	]
+
+    for(var i = 0; i < textMarkersHuge.length; i++){
+        var icon =  L.divIcon({className: 'parallax-marker label huge', html: textMarkersHuge[i].html, iconSize: [200, 36], iconAnchor: [100, 18]});
+        L.Marker.parallax(textMarkersHuge[i].latlng,{icon: icon, parallaxZoffset: 6}).addTo(map);
+    }
+
+
+</script>
+</body>
+</html>
